@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FIRETRACK Incident Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #E8EDF2; overflow: hidden; }
+    #map { width: 100%; height: 100%; }
+    #no-data {
+      display: none; position: absolute; inset: 0; z-index: 9999;
+      background: #F0F4F8;
+      align-items: center; justify-content: center; flex-direction: column; gap: 10px;
+    }
+    #no-data.visible { display: flex; }
+    #no-data p {
+      font-family: Consolas, monospace; font-size: 10px; font-weight: bold;
+      letter-spacing: 3px; color: #8098B0; text-align: center;
+    }
+    /* Light popup override */
+    .leaflet-popup-content-wrapper {
+      background: #FFFFFF; border: 1px solid #C8D8E8; border-radius: 0 !important;
+      color: #1A2535; box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+    .leaflet-popup-tip { background: #FFFFFF; }
+    .leaflet-popup-content {
+      margin: 10px 14px; font-family: Consolas, monospace;
+      font-size: 11px; line-height: 1.7; min-width: 180px;
+    }
+    .p-title {
+      font-size: 11px; font-weight: bold; letter-spacing: 1px;
+      border-bottom: 1px solid #E0E8F0; padding-bottom: 5px; margin-bottom: 6px;
+    }
+    .p-row { color: #6080A0; margin-bottom: 2px; }
+    .p-row span { color: #1A2535; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+<div id="no-data"><p>NO LOCATION DATA<br>AVAILABLE</p></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // ── Map init — light tiles, all interactions enabled ──────────────────
+  var map = L.map('map', {
+    center: [10.3157, 123.8854], zoom: 13,
+    zoomControl: true, attributionControl: false
+  });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19, subdomains: 'abcd'
+  }).addTo(map);
+
+  var markerMap = {}; // incidentID (string) → Leaflet marker
+
+  function alarmColor(level) {
+    if (level === 1) return '#C08000'; // amber, darkened for light bg
+    if (level === 2) return '#C04400'; // orange
+    return '#A02020';                   // red
+  }
+
+  function makeIcon(color) {
+    return L.divIcon({
+      html: '<div style="width:14px;height:14px;transform:rotate(45deg);background:' + color +
+            ';box-shadow:0 0 6px ' + color + '88;"></div>',
+      iconSize: [14, 14], iconAnchor: [7, 7], className: ''
+    });
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function buildPopup(inc) {
+    var color = alarmColor(inc.alarmLevel || 1);
+    var sitioLine = inc.sitio
+      ? '<div class="p-row">Sitio: <span>' + esc(inc.sitio) + '</span></div>'
+      : '';
+    var cause = (inc.cause && inc.cause.length > 0) ? esc(inc.cause) : '—';
+    var date  = (inc.date  && inc.date.length  > 0) ? esc(inc.date)  : '—';
+    return '<div class="p-title" style="color:' + color + '">' +
+             'ALARM ' + (inc.alarmLevel || '?') +
+             ' &nbsp;&middot;&nbsp; ' + esc((inc.status || '').toUpperCase()) +
+           '</div>' +
+           '<div class="p-row">Barangay: <span>Brgy. ' + esc(inc.barangay || '') + '</span></div>' +
+           sitioLine +
+           '<div class="p-row">Cause: <span>' + cause + '</span></div>' +
+           '<div class="p-row">Date: <span>' + date + '</span></div>';
+  }
+
+  // ── Load all incidents as pins ────────────────────────────────────────
+  function loadIncidents(incidents) {
+    for (var id in markerMap) { map.removeLayer(markerMap[id]); }
+    markerMap = {};
+
+    incidents.forEach(function(inc) {
+      var lat = parseFloat(inc.lat) || 0;
+      var lng = parseFloat(inc.lng) || 0;
+      if (lat === 0 && lng === 0) return; // skip no-GPS
+      var color = alarmColor(inc.alarmLevel || 1);
+      var m = L.marker([lat, lng], { icon: makeIcon(color) })
+        .bindPopup(buildPopup(inc), { maxWidth: 260 })
+        .addTo(map);
+      markerMap[String(inc.id)] = m;
+    });
+  }
+
+  // ── Fly to a specific incident pin and open its popup ─────────────────
+  function focusIncident(inc) {
+    document.getElementById('no-data').classList.remove('visible');
+    var m = markerMap[String(inc.id)];
+    if (m) {
+      map.flyTo(m.getLatLng(), 17, { duration: 0.7 });
+      setTimeout(function() { m.openPopup(); }, 750);
+    } else {
+      // Incident has no GPS pin — show overlay
+      document.getElementById('no-data').classList.add('visible');
+    }
+  }
+
+  // ── C# → JS bridge ───────────────────────────────────────────────────
+  window.chrome.webview.addEventListener('message', function(e) {
+    try {
+      var msg = JSON.parse(e.data);
+      if      (msg.type === 'load_incidents') loadIncidents(msg.incidents || []);
+      else if (msg.type === 'focus_incident') focusIncident(msg);
+    } catch(err) {
+      console.error('citizen_map error:', err);
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="CPE262_FINAL_PROJECT.Views.DSDWDashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#09131C">
+
+    <Page.Resources>
+
+        <Style x:Key="NavItemStyle" TargetType="Button">
+            <Setter Property="Background"                 Value="Transparent"/>
+            <Setter Property="BorderThickness"            Value="0"/>
+            <Setter Property="Padding"                    Value="0"/>
+            <Setter Property="HorizontalAlignment"        Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="CornerRadius"               Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bg" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#0F2035"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Ind" Storyboard.TargetProperty="Opacity">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0.4"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bg" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#162840"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="Bg" Background="Transparent" CornerRadius="0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Rectangle x:Name="Ind" Grid.Column="0" Fill="#4CAF90" Opacity="0"/>
+                                    <ContentPresenter Grid.Column="1" Margin="14,10,12,10"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryBtnStyle" TargetType="Button">
+            <Setter Property="Background"                 Value="#1A4A3A"/>
+            <Setter Property="BorderThickness"            Value="0"/>
+            <Setter Property="Padding"                    Value="16,8"/>
+            <Setter Property="CornerRadius"               Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bg" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#215E4A"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bg" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#133A2A"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="Bg" Background="#1A4A3A" CornerRadius="0" Padding="16,8">
+                                <ContentPresenter HorizontalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GhostBtnStyle" TargetType="Button">
+            <Setter Property="Background"                 Value="Transparent"/>
+            <Setter Property="BorderBrush"                Value="#253A52"/>
+            <Setter Property="BorderThickness"            Value="1"/>
+            <Setter Property="Padding"                    Value="14,7"/>
+            <Setter Property="CornerRadius"               Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bg" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#0F2035"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bg" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#162840"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="Bg" Background="Transparent" BorderBrush="#253A52"
+                                    BorderThickness="1" CornerRadius="0" Padding="14,7">
+                                <ContentPresenter HorizontalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LogoutStyle" TargetType="Button">
+            <Setter Property="Background"          Value="Transparent"/>
+            <Setter Property="BorderBrush"         Value="#1A3A28"/>
+            <Setter Property="BorderThickness"     Value="1"/>
+            <Setter Property="Padding"             Value="0,7"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="CornerRadius"        Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bg" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#1A3A28"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Lbl" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#4CAF90"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="Bg" Background="Transparent" BorderBrush="#1A3A28"
+                                    BorderThickness="1" CornerRadius="0">
+                                <TextBlock x:Name="Lbl" Text="[ LOGOUT ]"
+                                           FontFamily="Consolas" FontSize="10" Foreground="#3A5570"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Padding="0,7" CharacterSpacing="80"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#0C1A26"
+                BorderThickness="0,0,1,0" BorderBrush="#172435">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Padding="18,22,18,18" Spacing="14">
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="FIRETRACK" FontSize="16" FontWeight="Bold"
+                                   FontFamily="Consolas" Foreground="#C8D8E8" CharacterSpacing="200"/>
+                        <TextBlock Text="DISASTER RESPONSE SYSTEM" FontFamily="Consolas"
+                                   FontSize="8" Foreground="#2A4060" CharacterSpacing="120"/>
+                    </StackPanel>
+                    <Border Background="#0F2A1E" Padding="10,6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Rectangle Width="2" Height="12" Fill="#4CAF90" VerticalAlignment="Center"/>
+                            <TextBlock Text="DSWD COORDINATOR" FontFamily="Consolas" FontSize="9"
+                                       Foreground="#4CAF90" FontWeight="Bold" CharacterSpacing="100"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <Rectangle Grid.Row="0" Height="1" Fill="#172435" VerticalAlignment="Bottom"/>
+
+                <StackPanel Grid.Row="1" Spacing="0" Padding="0,16,0,0">
+                    <TextBlock Text="NAVIGATION" FontFamily="Consolas" FontSize="8"
+                               Foreground="#1E3050" CharacterSpacing="250"
+                               Margin="18,0,0,10" FontWeight="Bold"/>
+
+                    <Button x:Name="NavOverviewBtn" Style="{StaticResource NavItemStyle}" Click="NavOverview_Click">
+                        <StackPanel Spacing="1">
+                            <TextBlock Text="■  OVERVIEW" FontFamily="Consolas" FontSize="11"
+                                       FontWeight="Bold" Foreground="#7A9BB8" CharacterSpacing="80"/>
+                            <TextBlock Text="Relief summary" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                    </Button>
+                    <Rectangle Height="1" Fill="#101E2E" Margin="18,4,18,4"/>
+
+                    <Button x:Name="NavDistributionBtn" Style="{StaticResource NavItemStyle}" Click="NavDistribution_Click">
+                        <StackPanel Spacing="1">
+                            <TextBlock Text="▤  RELIEF DISTRIBUTION" FontFamily="Consolas" FontSize="11"
+                                       FontWeight="Bold" Foreground="#7A9BB8" CharacterSpacing="80"/>
+                            <TextBlock Text="Record &amp; track relief" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                    </Button>
+                    <Rectangle Height="1" Fill="#101E2E" Margin="18,4,18,4"/>
+
+                    <Button x:Name="NavGapsBtn" Style="{StaticResource NavItemStyle}" Click="NavGaps_Click">
+                        <StackPanel Spacing="1">
+                            <TextBlock Text="▦  GAPS &amp; DUPLICATES" FontFamily="Consolas" FontSize="11"
+                                       FontWeight="Bold" Foreground="#7A9BB8" CharacterSpacing="80"/>
+                            <TextBlock Text="Monitor coverage" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                    </Button>
+                    <Rectangle Height="1" Fill="#101E2E" Margin="18,4,18,4"/>
+
+                    <Button x:Name="NavIncidentsBtn" Style="{StaticResource NavItemStyle}" Click="NavIncidents_Click">
+                        <StackPanel Spacing="1">
+                            <TextBlock Text="●  ACTIVE INCIDENTS" FontFamily="Consolas" FontSize="11"
+                                       FontWeight="Bold" Foreground="#7A9BB8" CharacterSpacing="80"/>
+                            <TextBlock Text="DSWD response status" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                    </Button>
+                    <Rectangle Height="1" Fill="#101E2E" Margin="18,4,18,4"/>
+
+                    <Button x:Name="NavCityCentersBtn" Style="{StaticResource NavItemStyle}" Click="NavCityCenters_Click">
+                        <StackPanel Spacing="1">
+                            <TextBlock Text="◈  CITY-LEVEL CENTERS" FontFamily="Consolas" FontSize="11"
+                                       FontWeight="Bold" Foreground="#7A9BB8" CharacterSpacing="80"/>
+                            <TextBlock Text="Map &amp; manage centers" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                    </Button>
+                    <Rectangle Height="1" Fill="#101E2E" Margin="18,4,18,4"/>
+
+                    <Button x:Name="NavAnalysisBtn" Style="{StaticResource NavItemStyle}" Click="NavAnalysis_Click">
+                        <StackPanel Spacing="1">
+                            <TextBlock Text="▣  ANALYSIS" FontFamily="Consolas" FontSize="11"
+                                       FontWeight="Bold" Foreground="#7A9BB8" CharacterSpacing="80"/>
+                            <TextBlock Text="Charts &amp; coverage insights" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="#172435" Padding="18,16">
+                    <StackPanel Spacing="10">
+                        <StackPanel Spacing="2">
+                            <TextBlock x:Name="OperatorName" Text="COORDINATOR"
+                                       FontFamily="Consolas" FontSize="11" Foreground="#C8D8E8" FontWeight="Bold"/>
+                            <TextBlock Text="DSWD Coordinator" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Rectangle Width="6" Height="6" Fill="#2A6A40" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ClockText" Text="00:00:00"
+                                       FontFamily="Consolas" FontSize="10" Foreground="#2A4060"/>
+                        </StackPanel>
+                        <Button Style="{StaticResource LogoutStyle}" Click="Logout_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="52"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Background="#0C1A26"
+                    BorderThickness="0,0,0,1" BorderBrush="#172435" Padding="24,0">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
+                        <TextBlock x:Name="TopBarTitle" Text="OVERVIEW" FontFamily="Consolas"
+                                   FontSize="13" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="150"/>
+                        <TextBlock Text=" / " FontFamily="Consolas" FontSize="13"
+                                   Foreground="#1E3050" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TopBarSubtitle" Text="DSWD Relief Operations"
+                                   FontFamily="Consolas" FontSize="11" Foreground="#3A5570" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Border HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Background="Transparent" BorderThickness="1" BorderBrush="#172435" Padding="12,5">
+                        <StackPanel Orientation="Horizontal" Spacing="7">
+                            <Rectangle Width="6" Height="6" Fill="#2A7A40" VerticalAlignment="Center"/>
+                            <TextBlock Text="SYSTEM ONLINE" FontFamily="Consolas" FontSize="9"
+                                       Foreground="#2A7A40" FontWeight="Bold" CharacterSpacing="100"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <ScrollViewer x:Name="SectionOverview" Grid.Row="1" Padding="24,20">
+                <StackPanel Spacing="20">
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Grid.Column="0" Fill="#1A4A3A"/>
+                                <StackPanel Grid.Column="1" Spacing="6" Padding="16,16">
+                                    <TextBlock Text="FAMILIES SERVED" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="200"/>
+                                    <TextBlock x:Name="StatFamiliesServed" Text="—" FontFamily="Consolas" FontSize="30" FontWeight="Bold" Foreground="#4CAF90"/>
+                                    <TextBlock Text="Received relief" FontFamily="Consolas" FontSize="8" Foreground="#1E3050"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="1" Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Grid.Column="0" Fill="#1A4A3A"/>
+                                <StackPanel Grid.Column="1" Spacing="6" Padding="16,16">
+                                    <TextBlock Text="TOTAL DISTRIBUTIONS" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="200"/>
+                                    <TextBlock x:Name="StatTotalDistributions" Text="—" FontFamily="Consolas" FontSize="30" FontWeight="Bold" Foreground="#4CAF90"/>
+                                    <TextBlock Text="Records logged" FontFamily="Consolas" FontSize="8" Foreground="#1E3050"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="2" Background="#12100A" BorderThickness="1" BorderBrush="#2A2010">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Grid.Column="0" Fill="#7A6020"/>
+                                <StackPanel Grid.Column="1" Spacing="6" Padding="16,16">
+                                    <TextBlock Text="UNSERVED FAMILIES" FontFamily="Consolas" FontSize="8" Foreground="#5A4030" CharacterSpacing="200"/>
+                                    <TextBlock x:Name="StatUnserved" Text="—" FontFamily="Consolas" FontSize="30" FontWeight="Bold" Foreground="#C09A30"/>
+                                    <TextBlock Text="Pending relief" FontFamily="Consolas" FontSize="8" Foreground="#3A2010"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="3" Background="#120A0A" BorderThickness="1" BorderBrush="#2A1010">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Grid.Column="0" Fill="#7A2020"/>
+                                <StackPanel Grid.Column="1" Spacing="6" Padding="16,16">
+                                    <TextBlock Text="POSSIBLE DUPLICATES" FontFamily="Consolas" FontSize="8" Foreground="#5A3030" CharacterSpacing="200"/>
+                                    <TextBlock x:Name="StatDuplicates" Text="—" FontFamily="Consolas" FontSize="30" FontWeight="Bold" Foreground="#C05050"/>
+                                    <TextBlock Text="Needs verification" FontFamily="Consolas" FontSize="8" Foreground="#3A2020"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="300"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                            <StackPanel>
+                                <Border Padding="18,14" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                    <Grid>
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="RECENT DISTRIBUTIONS" FontFamily="Consolas" FontSize="11" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="120"/>
+                                            <TextBlock Text="Last 10 relief records" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                                        </StackPanel>
+                                        <Button Style="{StaticResource PrimaryBtnStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Click="OpenRecordDistributionDialog_Click">
+                                            <TextBlock Text="+ RECORD DISTRIBUTION" FontFamily="Consolas" FontSize="9" Foreground="White" FontWeight="Bold" CharacterSpacing="60"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                                <Border Background="#09131C" Padding="18,8,18,8">
+                                    <Grid ColumnSpacing="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="90"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="RECIPIENT" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                        <TextBlock Grid.Column="1" Text="ITEM TYPE" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                        <TextBlock Grid.Column="2" Text="QTY" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                        <TextBlock Grid.Column="3" Text="DATE" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                    </Grid>
+                                </Border>
+                                <StackPanel x:Name="OverviewLedgerPanel"/>
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Grid.Column="1" Spacing="12">
+                            <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                                <StackPanel>
+                                    <Border Padding="16,12" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                        <TextBlock Text="NEEDS RESPONSE" FontFamily="Consolas" FontSize="10" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="80"/>
+                                    </Border>
+                                    <StackPanel x:Name="OverviewPendingPanel" Padding="0,4,0,4"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                                <StackPanel>
+                                    <Border Padding="16,12" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                        <TextBlock Text="QUICK ACTIONS" FontFamily="Consolas" FontSize="10" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="80"/>
+                                    </Border>
+                                    <StackPanel Padding="12,10" Spacing="6">
+                                        <Button Style="{StaticResource GhostBtnStyle}" HorizontalAlignment="Stretch" Click="OpenRecordDistributionDialog_Click">
+                                            <StackPanel Spacing="1">
+                                                <TextBlock Text="+ Record Distribution" FontFamily="Consolas" FontSize="10" Foreground="#C8D8E8" FontWeight="Bold"/>
+                                                <TextBlock Text="Log relief given to a family" FontFamily="Consolas" FontSize="8" Foreground="#2A4060"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Style="{StaticResource GhostBtnStyle}" HorizontalAlignment="Stretch" Click="NavGaps_Click">
+                                            <StackPanel Spacing="1">
+                                                <TextBlock Text="▦ View Gaps &amp; Duplicates" FontFamily="Consolas" FontSize="10" Foreground="#C8D8E8" FontWeight="Bold"/>
+                                                <TextBlock Text="Check coverage issues" FontFamily="Consolas" FontSize="8" Foreground="#2A4060"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Style="{StaticResource GhostBtnStyle}" HorizontalAlignment="Stretch" Click="NavIncidents_Click">
+                                            <StackPanel Spacing="1">
+                                                <TextBlock Text="● Active Incidents" FontFamily="Consolas" FontSize="10" Foreground="#C8D8E8" FontWeight="Bold"/>
+                                                <TextBlock Text="Update DSWD response status" FontFamily="Consolas" FontSize="8" Foreground="#2A4060"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button x:Name="CitizenMsgBtn" Style="{StaticResource GhostBtnStyle}" HorizontalAlignment="Stretch" Click="OpenCitizenMessagesOverlay_Click">
+                                            <Grid HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" Spacing="1">
+                                                    <TextBlock Text="&gt; Citizen Messages" FontFamily="Consolas" FontSize="10" Foreground="#C8D8E8" FontWeight="Bold"/>
+                                                    <TextBlock Text="Review &amp; respond to citizens" FontFamily="Consolas" FontSize="8" Foreground="#2A4060"/>
+                                                </StackPanel>
+                                                <Border x:Name="CitizenMsgBadge" Grid.Column="1"
+                                                        Background="#2A1E06" Padding="6,2,6,2"
+                                                        VerticalAlignment="Center" Visibility="Collapsed">
+                                                    <TextBlock x:Name="CitizenMsgBadgeCount" Text="0"
+                                                               FontFamily="Consolas" FontSize="9"
+                                                               Foreground="#C09A30" FontWeight="Bold"/>
+                                                </Border>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer x:Name="SectionDistribution" Grid.Row="1" Padding="24,20" Visibility="Collapsed">
+                <StackPanel Spacing="16">
+                    <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                        <StackPanel>
+                            <Border Padding="18,14" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                <StackPanel Spacing="10">
+                                    <Grid>
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="RELIEF DISTRIBUTION LEDGER" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="120"/>
+                                            <TextBlock x:Name="DistributionSubtitle" Text="All recorded relief distributions" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                                        </StackPanel>
+                                        <Button Style="{StaticResource PrimaryBtnStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Click="OpenRecordDistributionDialog_Click">
+                                            <TextBlock Text="+ RECORD DISTRIBUTION" FontFamily="Consolas" FontSize="9" Foreground="White" FontWeight="Bold" CharacterSpacing="60"/>
+                                        </Button>
+                                    </Grid>
+                                    <TextBox x:Name="LedgerSearchBox"
+                                             PlaceholderText="Search by recipient, item type, or agency..."
+                                             FontFamily="Consolas" FontSize="10" Background="#09131C" Foreground="White"
+                                             BorderBrush="#253A52" CornerRadius="0" Padding="10,7"
+                                             TextChanged="LedgerSearchBox_TextChanged"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#09131C" Padding="18,8,18,8">
+                                <Grid ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="RECIPIENT" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                    <TextBlock Grid.Column="1" Text="ITEM TYPE" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                    <TextBlock Grid.Column="2" Text="QTY" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                    <TextBlock Grid.Column="3" Text="AGENCY" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                    <TextBlock Grid.Column="4" Text="DATE" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                </Grid>
+                            </Border>
+                            <StackPanel x:Name="FullLedgerPanel"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer x:Name="SectionGaps" Grid.Row="1" Padding="24,20" Visibility="Collapsed">
+                <StackPanel Spacing="16">
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                            <StackPanel>
+                                <Border Padding="18,14" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="UNSERVED FAMILIES" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#C09A30" CharacterSpacing="120"/>
+                                        <TextBlock x:Name="UnservedSubtitle" Text="Families with no relief record" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="#09131C" Padding="18,8,18,8">
+                                    <Grid ColumnSpacing="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="HEAD OF FAMILY" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                        <TextBlock Grid.Column="1" Text="MBRS" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                        <TextBlock Grid.Column="2" Text="BARANGAY" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                    </Grid>
+                                </Border>
+                                <StackPanel x:Name="UnservedPanel"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                            <StackPanel>
+                                <Border Padding="18,14" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="POSSIBLE DUPLICATES" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#C05050" CharacterSpacing="120"/>
+                                        <TextBlock x:Name="DuplicatesSubtitle" Text="Same head name in multiple incidents" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="#09131C" Padding="18,8,18,8">
+                                    <Grid ColumnSpacing="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="70"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="HEAD OF FAMILY" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                        <TextBlock Grid.Column="1" Text="INCIDENTS" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                        <TextBlock Grid.Column="2" Text="MEMBERS" FontFamily="Consolas" FontSize="8" Foreground="#2A4060" CharacterSpacing="180"/>
+                                    </Grid>
+                                </Border>
+                                <StackPanel x:Name="DuplicatesPanel"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer x:Name="SectionIncidents" Grid.Row="1" Padding="24,20" Visibility="Collapsed">
+                <StackPanel Spacing="16">
+                    <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#172435">
+                        <StackPanel>
+                            <Border Padding="18,14" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                <StackPanel Spacing="10">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="ACTIVE INCIDENTS" FontFamily="Consolas" FontSize="13" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="120"/>
+                                        <TextBlock x:Name="IncidentsSubtitle" Text="All incidents — update DSWD response status" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                                    </StackPanel>
+                                    <TextBox x:Name="IncidentSearchBox"
+                                             PlaceholderText="Search by #ID, barangay, sitio, or status..."
+                                             FontFamily="Consolas" FontSize="10" Background="#09131C" Foreground="White"
+                                             BorderBrush="#253A52" CornerRadius="0" Padding="10,7"
+                                             TextChanged="IncidentSearchBox_TextChanged"/>
+                                </StackPanel>
+                            </Border>
+                            <StackPanel x:Name="IncidentsPanel" Padding="0,6,0,6"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid x:Name="SectionCityCenters" Grid.Row="1" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <WebView2 x:Name="DSDWMapWebView"/>
+                    <Border x:Name="DSDWMapLoading" Background="#09131C" Visibility="Collapsed">
+                        <TextBlock Text="INITIALIZING MAP..." FontFamily="Consolas" FontSize="11"
+                                   Foreground="#3A5570" CharacterSpacing="200"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+
+                <Border Grid.Column="1" Background="#0C1A26" BorderThickness="1,0,0,0" BorderBrush="#172435">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Padding="16,14" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="CITY-LEVEL CENTERS" FontFamily="Consolas" FontSize="11"
+                                           FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="120"/>
+                                <TextBlock Text="DSWD-managed, visible to all barangays"
+                                           FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                            </StackPanel>
+                        </Border>
+
+                        <ScrollViewer Grid.Row="1">
+                            <StackPanel Spacing="0">
+                                <Border Padding="14,12" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                                    <StackPanel Spacing="8">
+                                        <Button Style="{StaticResource PrimaryBtnStyle}"
+                                                HorizontalAlignment="Stretch"
+                                                Click="DSDWMap_PlaceCenter_Click">
+                                            <TextBlock Text="+ PLACE NEW CENTER" FontFamily="Consolas"
+                                                       FontSize="9" Foreground="White" FontWeight="Bold" CharacterSpacing="80"/>
+                                        </Button>
+                                        <Button Style="{StaticResource GhostBtnStyle}"
+                                                HorizontalAlignment="Stretch"
+                                                Click="OpenUsageReportOverlay_Click">
+                                            <TextBlock Text="VIEW USAGE REPORT" FontFamily="Consolas"
+                                                       FontSize="9" Foreground="#4CAF90" FontWeight="Bold" CharacterSpacing="60"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border x:Name="DSDWAddCenterForm" Padding="14,12"
+                                        BorderThickness="0,0,0,1" BorderBrush="#172435"
+                                        Visibility="Collapsed">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="NEW CITY-LEVEL CENTER" FontFamily="Consolas"
+                                                   FontSize="9" Foreground="#3A5570" CharacterSpacing="150" FontWeight="Bold"/>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="NAME *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180"/>
+                                            <TextBox x:Name="DSDWNewName" PlaceholderText="e.g. Cebu City Gym"
+                                                     FontFamily="Consolas" FontSize="10" Background="#09131C"
+                                                     Foreground="White" BorderBrush="#253A52" CornerRadius="0" Padding="8,6"/>
+                                        </StackPanel>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="BARANGAY (auto-detected from pin location)" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180"/>
+                                            <Border Background="#09131C" BorderBrush="#253A52" BorderThickness="1" Padding="8,6">
+                                                <TextBlock x:Name="DSDWDetectedBarangay" Text="—"
+                                                           FontFamily="Consolas" FontSize="10" Foreground="#4CAF90" FontWeight="Bold"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="CAPACITY *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180"/>
+                                            <TextBox x:Name="DSDWNewCapacity" PlaceholderText="Max persons"
+                                                     FontFamily="Consolas" FontSize="10" Background="#09131C"
+                                                     Foreground="White" BorderBrush="#253A52" CornerRadius="0" Padding="8,6"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="DSDWNewError" Text="" FontFamily="Consolas" FontSize="9"
+                                                   Foreground="#C05050" Visibility="Collapsed" TextWrapping="Wrap"/>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Button Style="{StaticResource PrimaryBtnStyle}" Click="DSDWMap_ConfirmAdd_Click">
+                                                <TextBlock Text="SAVE" FontFamily="Consolas" FontSize="9" Foreground="White" FontWeight="Bold" CharacterSpacing="80"/>
+                                            </Button>
+                                            <Button Style="{StaticResource GhostBtnStyle}" Click="DSDWMap_CancelAdd_Click">
+                                                <TextBlock Text="CANCEL" FontFamily="Consolas" FontSize="9" Foreground="#3A5570" CharacterSpacing="60"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border x:Name="DSDWOccForm" Padding="14,12"
+                                        BorderThickness="0,0,0,1" BorderBrush="#172435"
+                                        Visibility="Collapsed">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock x:Name="DSDWOccTitle" Text="UPDATE OCCUPANCY" FontFamily="Consolas"
+                                                   FontSize="9" Foreground="#3A5570" CharacterSpacing="150" FontWeight="Bold"/>
+                                        <TextBlock x:Name="DSDWOccHint" Text="" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                                        <TextBox x:Name="DSDWOccInput" PlaceholderText="Current occupancy"
+                                                 FontFamily="Consolas" FontSize="10" Background="#09131C"
+                                                 Foreground="White" BorderBrush="#253A52" CornerRadius="0" Padding="8,6"/>
+                                        <TextBlock x:Name="DSDWOccError" Text="" FontFamily="Consolas" FontSize="9"
+                                                   Foreground="#C05050" Visibility="Collapsed"/>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Button Style="{StaticResource PrimaryBtnStyle}" Click="DSDWMap_ConfirmOcc_Click">
+                                                <TextBlock Text="UPDATE" FontFamily="Consolas" FontSize="9" Foreground="White" FontWeight="Bold" CharacterSpacing="80"/>
+                                            </Button>
+                                            <Button Style="{StaticResource GhostBtnStyle}" Click="DSDWMap_CancelOcc_Click">
+                                                <TextBlock Text="CANCEL" FontFamily="Consolas" FontSize="9" Foreground="#3A5570" CharacterSpacing="60"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Padding="14,12">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Text="PIN LEGEND" FontFamily="Consolas" FontSize="9"
+                                                   Foreground="#3A5570" CharacterSpacing="150" FontWeight="Bold"/>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Border Width="10" Height="10" Background="#4CAF90" VerticalAlignment="Center"/>
+                                            <TextBlock Text="City-Level Center (DSWD)" FontFamily="Consolas" FontSize="9" Foreground="#7A9BB8"/>
+                                        </StackPanel>
+                                        <TextBlock Text="Click any pin to update occupancy or remove." FontFamily="Consolas" FontSize="8" Foreground="#2A4060" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <Border Grid.Row="2" Padding="14,8" BorderThickness="0,1,0,0" BorderBrush="#172435">
+                            <TextBlock x:Name="DSDWMapStatus" Text="MAP READY" FontFamily="Consolas"
+                                       FontSize="9" Foreground="#2A4060" CharacterSpacing="100"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+
+            <Grid x:Name="SectionAnalysis" Grid.Row="1" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="#0C1A26"
+                        BorderThickness="0,0,0,1" BorderBrush="#172435" Padding="24,12">
+                    <Grid>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="DSWD ANALYSIS DASHBOARD" FontFamily="Consolas" FontSize="13"
+                                       FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="120"/>
+                            <TextBlock Text="City-wide relief &amp; displacement insights" FontFamily="Consolas"
+                                       FontSize="9" Foreground="#2A4060"/>
+                        </StackPanel>
+                        <Border HorizontalAlignment="Right" VerticalAlignment="Center"
+                                Background="#0F2A1E" Padding="10,5" BorderThickness="1" BorderBrush="#1A4A3A">
+                            <TextBlock x:Name="AnalysisTimestamp" Text="—"
+                                       FontFamily="Consolas" FontSize="9" Foreground="#4CAF90" CharacterSpacing="80"/>
+                        </Border>
+                    </Grid>
+                </Border>
+                <WebView2 x:Name="AnalysisWebView" Grid.Row="1"/>
+            </Grid>
+
+        </Grid>
+
+
+        <Border x:Name="CitizenMessagesOverlay" Grid.Column="0" Grid.ColumnSpan="2"
+                Background="#CC000000" Visibility="Collapsed">
+            <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#1A4A3A"
+                    Width="680" MaxHeight="700" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Padding="22,16" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                        <Grid>
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="&gt;&gt; CITIZEN MESSAGES" FontFamily="Consolas" FontSize="13"
+                                           FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="120"/>
+                                <TextBlock x:Name="CitizenMsgOverlaySubtitle" Text="— MESSAGES RECEIVED"
+                                           FontFamily="Consolas" FontSize="9" Foreground="#4CAF90" CharacterSpacing="100"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Background="Transparent" BorderThickness="0"
+                                    Click="CloseCitizenMessagesOverlay_Click" Padding="8">
+                                <TextBlock Text="x" FontFamily="Consolas" FontSize="13" Foreground="#3A5570"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" Padding="0,0,0,8">
+                        <StackPanel x:Name="CitizenMsgOverlayPanel" Padding="0"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Border>
+
+
+        <Border x:Name="RecordDistributionOverlay" Grid.Column="0" Grid.ColumnSpan="2"
+                Background="#CC000000" Visibility="Collapsed">
+            <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#1A4A3A"
+                    Width="500" MaxHeight="600" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <Border Padding="22,18" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                        <Grid>
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="RECORD RELIEF DISTRIBUTION" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="100"/>
+                                <TextBlock Text="Log a relief item given to a displaced family" FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Background="Transparent" BorderThickness="0"
+                                    Click="CloseRecordDistributionDialog_Click" Padding="8">
+                                <TextBlock Text="x" FontFamily="Consolas" FontSize="13" Foreground="#3A5570"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <StackPanel Padding="22,18" Spacing="14">
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="INCIDENT *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180" FontWeight="Bold"/>
+                            <AutoSuggestBox x:Name="DistIncidentBox"
+                                            PlaceholderText="Search by #ID, barangay, or status..."
+                                            FontFamily="Consolas" FontSize="10"
+                                            Background="#09131C" Foreground="#C8D8E8"
+                                            TextChanged="DistIncidentBox_TextChanged"
+                                            SuggestionChosen="DistIncidentBox_SuggestionChosen"/>
+                        </StackPanel>
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="FAMILY *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180" FontWeight="Bold"/>
+                            <AutoSuggestBox x:Name="DistFamilyBox"
+                                            PlaceholderText="Select an incident first, then search family..."
+                                            FontFamily="Consolas" FontSize="10"
+                                            Background="#09131C" Foreground="#C8D8E8"
+                                            IsEnabled="False"
+                                            TextChanged="DistFamilyBox_TextChanged"
+                                            SuggestionChosen="DistFamilyBox_SuggestionChosen"/>
+                        </StackPanel>
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Spacing="5">
+                                <TextBlock Text="ITEM TYPE *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180" FontWeight="Bold"/>
+                                <TextBox x:Name="DistItemType" PlaceholderText="e.g. Food Pack, Hygiene Kit"
+                                         FontFamily="Consolas" FontSize="10" Background="#09131C" Foreground="White"
+                                         BorderBrush="#253A52" CornerRadius="0" Padding="10,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="5">
+                                <TextBlock Text="QUANTITY *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180" FontWeight="Bold"/>
+                                <TextBox x:Name="DistQuantity" PlaceholderText="e.g. 1"
+                                         FontFamily="Consolas" FontSize="10" Background="#09131C" Foreground="White"
+                                         BorderBrush="#253A52" CornerRadius="0" Padding="10,8"/>
+                            </StackPanel>
+                        </Grid>
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="AGENCY NAME *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180" FontWeight="Bold"/>
+                            <TextBox x:Name="DistAgency" PlaceholderText="e.g. DSWD, Red Cross"
+                                     FontFamily="Consolas" FontSize="10" Background="#09131C" Foreground="White"
+                                     BorderBrush="#253A52" CornerRadius="0" Padding="10,8"/>
+                        </StackPanel>
+                        <TextBlock x:Name="DistErrorMsg" Text="" FontFamily="Consolas" FontSize="9"
+                                   Foreground="#C05050" Visibility="Collapsed" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Border Padding="22,14" BorderThickness="0,1,0,0" BorderBrush="#172435">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                            <Button Style="{StaticResource GhostBtnStyle}" Click="CloseRecordDistributionDialog_Click">
+                                <TextBlock Text="CANCEL" FontFamily="Consolas" FontSize="9" Foreground="#3A5570" CharacterSpacing="80"/>
+                            </Button>
+                            <Button Style="{StaticResource PrimaryBtnStyle}" Click="SubmitDistribution_Click">
+                                <TextBlock Text="SAVE RECORD" FontFamily="Consolas" FontSize="9" Foreground="White" FontWeight="Bold" CharacterSpacing="80"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <Border x:Name="UpdateDSDWStatusOverlay" Grid.Column="0" Grid.ColumnSpan="2"
+                Background="#CC000000" Visibility="Collapsed">
+            <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#1A4A3A"
+                    Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <Border Padding="22,18" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                        <Grid>
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="UPDATE DSWD STATUS" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="100"/>
+                                <TextBlock x:Name="DSDWStatusIncidentLabel" Text="Incident: —" FontFamily="Consolas" FontSize="9" Foreground="#4CAF90"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Background="Transparent" BorderThickness="0"
+                                    Click="CloseDSDWStatusDialog_Click" Padding="8">
+                                <TextBlock Text="x" FontFamily="Consolas" FontSize="13" Foreground="#3A5570"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <StackPanel Padding="22,18" Spacing="14">
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="DSWD RESPONSE STATUS *" FontFamily="Consolas" FontSize="8" Foreground="#3A5570" CharacterSpacing="180" FontWeight="Bold"/>
+                            <ComboBox x:Name="DSDWStatusPicker" HorizontalAlignment="Stretch"
+                                      FontFamily="Consolas" FontSize="10" Background="#09131C" Foreground="White"
+                                      BorderBrush="#253A52" CornerRadius="0" Padding="10,8">
+                                <ComboBoxItem Content="Pending"/>
+                                <ComboBoxItem Content="Responding"/>
+                                <ComboBoxItem Content="Completed"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <TextBlock x:Name="DSDWStatusError" Text="" FontFamily="Consolas" FontSize="9"
+                                   Foreground="#C05050" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <Border Padding="22,14" BorderThickness="0,1,0,0" BorderBrush="#172435">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                            <Button Style="{StaticResource GhostBtnStyle}" Click="CloseDSDWStatusDialog_Click">
+                                <TextBlock Text="CANCEL" FontFamily="Consolas" FontSize="9" Foreground="#3A5570" CharacterSpacing="80"/>
+                            </Button>
+                            <Button Style="{StaticResource PrimaryBtnStyle}" Click="SubmitDSDWStatus_Click">
+                                <TextBlock Text="UPDATE STATUS" FontFamily="Consolas" FontSize="9" Foreground="White" FontWeight="Bold" CharacterSpacing="80"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <Grid x:Name="UsageReportOverlay" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed">
+            <Border Background="#CC000000"/>
+            <Border Background="#0C1A26" BorderThickness="1" BorderBrush="#1A4A3A"
+                    Width="700" MaxHeight="620" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Padding="22,16" BorderThickness="0,0,0,1" BorderBrush="#172435">
+                        <Grid>
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="CENTER USAGE REPORT" FontFamily="Consolas" FontSize="13"
+                                           FontWeight="Bold" Foreground="#C8D8E8" CharacterSpacing="120"/>
+                                <TextBlock x:Name="UsageReportSubtitle"
+                                           Text="Barangay usage breakdown for city-level centers"
+                                           FontFamily="Consolas" FontSize="9" Foreground="#2A4060"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Background="Transparent" BorderThickness="0"
+                                    Click="CloseUsageReportOverlay_Click" Padding="8">
+                                <TextBlock Text="x" FontFamily="Consolas" FontSize="13" Foreground="#3A5570"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" Padding="0,0,0,8">
+                        <StackPanel x:Name="UsageReportPanel" Padding="22,14,22,0" Spacing="0"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border x:Name="ToastBanner" Grid.Column="0" Grid.ColumnSpan="2"
+                Background="#091A10" BorderThickness="1,0,0,0" BorderBrush="#1A6A30"
+                Padding="16,10" Width="300" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Margin="0,0,24,24" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Rectangle Width="2" Fill="#2A9A40" VerticalAlignment="Stretch"/>
+                <TextBlock x:Name="ToastMessage" Text="Action completed" FontFamily="Consolas"
+                           FontSize="10" Foreground="#8AC8A0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Page>

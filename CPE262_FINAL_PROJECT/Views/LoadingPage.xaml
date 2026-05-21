@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="CPE262_FINAL_PROJECT.Views.LoadingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="#0D1B2A">
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Spacing="20" HorizontalAlignment="Center">
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12">
+                <TextBlock Text="FIRETRACK"
+                           FontSize="32" FontWeight="Bold"
+                           FontFamily="Consolas" Foreground="White"
+                           VerticalAlignment="Center" CharacterSpacing="150"/>
+            </StackPanel>
+
+            <ProgressRing x:Name="Spinner"
+                          IsActive="True"
+                          Width="36" Height="36"
+                          Foreground="#FF8070"
+                          HorizontalAlignment="Center"/>
+
+            <TextBlock x:Name="StatusText"
+                       Text="ESTABLISHING SECURE CONNECTION..."
+                       FontFamily="Consolas" FontSize="12"
+                       Foreground="#FF9B8A"
+                       HorizontalAlignment="Center"
+                       CharacterSpacing="100"/>
+
+            <Border Background="#1E2D3D" CornerRadius="20" Padding="16,6"
+                    HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Ellipse Width="7" Height="7" Fill="#4CAF50" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="RoleBadge"
+                               Text="LOADING..."
+                               FontFamily="Consolas" FontSize="11"
+                               Foreground="#A0B4C8" CharacterSpacing="100"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </Grid>
+</Page>

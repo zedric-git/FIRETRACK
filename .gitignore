@@ -1,0 +1,29 @@
+# Personal handoff/notes markdown files
+_handoff_*.md
+_*.md
+_notes/
+FIRETRACK_CONTEXT.md
+
+# Visual Studio
+.vs/
+*.user
+
+# Build outputs
+**/bin/
+**/obj/
+
+# App packages
+**/AppPackages/
+
+# NuGet
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Build logs
+*.binlog

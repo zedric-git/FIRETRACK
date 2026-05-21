@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FIRETRACK — DSWD City Centers Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; background:#09131C; }
+#map { width:100%; height:100%; }
+#theme-btn {
+  position:absolute; top:10px; right:10px; z-index:1001;
+  background:#0C1A26; border:1px solid #1A4A3A; color:#4CAF90;
+  font-family:Consolas,monospace; font-size:10px; font-weight:bold;
+  letter-spacing:1px; padding:6px 12px; cursor:pointer;
+  display:flex; align-items:center; gap:7px; user-select:none;
+}
+#theme-btn:hover { background:#0F2035; border-color:#4CAF90; color:#C8D8E8; }
+#drop-banner, #reject-banner {
+  display:none; position:absolute; z-index:1001;
+  font-family:Consolas,monospace; font-size:10px; font-weight:bold;
+  letter-spacing:2px; padding:7px 18px; pointer-events:none; white-space:nowrap;
+  top:10px; left:50%; transform:translateX(-50%);
+}
+#drop-banner  { background:#1A4A3A; color:#C8D8E8; border:1px solid #4CAF90; }
+#reject-banner{ top:auto; bottom:16px; background:#1A0808; color:#C05050; border:1px solid #7A2020; }
+#loader {
+  display:none; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%); z-index:2000;
+  background:rgba(9,19,28,0.92); color:#4CAF90;
+  font-family:Consolas,monospace; font-size:11px; letter-spacing:2px;
+  padding:12px 22px; border:1px solid #1A4A3A;
+}
+.leaflet-popup-content-wrapper {
+  background:#0C1A26 !important; color:#C8D8E8;
+  border:1px solid #253A52 !important; border-radius:0 !important;
+  font-family:Consolas,monospace; font-size:11px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.8) !important;
+}
+.leaflet-popup-tip { background:#0C1A26 !important; }
+.leaflet-popup-content { margin:12px 14px !important; min-width:200px; line-height:1.8; }
+.p-title { font-size:11px; font-weight:bold; letter-spacing:1px; color:#4CAF90;
+            border-bottom:1px solid #172435; padding-bottom:5px; margin-bottom:5px; }
+.p-row { color:#3A5570; margin-bottom:1px; }
+.p-row span { color:#C8D8E8; }
+.p-bar-bg { background:#172435; height:3px; margin:6px 0; }
+.p-bar-fill { height:3px; }
+.p-btn { margin-top:7px; width:100%; background:#1A4A3A; border:none;
+  color:#C8D8E8; font-family:Consolas,monospace; font-size:9px;
+  font-weight:bold; letter-spacing:1px; padding:7px 0; cursor:pointer; }
+.p-btn:hover { background:#215E4A; }
+.p-btn-red { margin-top:5px; width:100%; background:transparent; border:1px solid #7A2020;
+  color:#C05050; font-family:Consolas,monospace; font-size:9px;
+  font-weight:bold; letter-spacing:1px; padding:6px 0; cursor:pointer; }
+.p-btn-red:hover { background:#1A0808; }
+.leaflet-control-zoom a {
+  background:#0C1A26 !important; color:#4CAF90 !important; border-color:#1A4A3A !important; }
+</style>
+</head>
+<body>
+<div id="drop-banner">+ CLICK WITHIN CEBU CITY TO PLACE CENTER</div>
+<div id="reject-banner">x PLACEMENT OUTSIDE CEBU CITY BOUNDARY</div>
+<div id="loader">&#x231B; GEOCODING BARANGAY...</div>
+<button id="theme-btn" onclick="toggleTheme()">
+  <span id="theme-icon">&#x2600;</span>
+  <span id="theme-label">LIGHT MODE</span>
+</button>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── CEBU CITY BOUNDARY ────────────────────────────────────────────────────
+var CEBU_CITY = [
+    [10.493494, 123.887977], [10.490852, 123.895334], [10.487373, 123.901598],
+    [10.485117, 123.913721], [10.479028, 123.918555], [10.476279, 123.919679],
+    [10.474151, 123.919717], [10.473296, 123.919984], [10.472653, 123.921488],
+    [10.472695, 123.922731], [10.473487, 123.923588], [10.473600, 123.923885],
+    [10.473598, 123.924361], [10.473422, 123.924816], [10.472554, 123.925094],
+    [10.471264, 123.925217], [10.453212, 123.925019], [10.434836, 123.923037],
+    [10.428896, 123.924317], [10.410396, 123.923413], [10.405157, 123.921716],
+    [10.400814, 123.924156], [10.398287, 123.923867], [10.398240, 123.923493],
+    [10.386649, 123.924130], [10.383341, 123.923180], [10.383082, 123.923889],
+    [10.382548, 123.923933], [10.380852, 123.924620], [10.379678, 123.924171],
+    [10.378069, 123.924205], [10.377358, 123.925385], [10.375241, 123.925540],
+    [10.374636, 123.926061], [10.374617, 123.926204], [10.373755, 123.926633],
+    [10.373821, 123.926830], [10.372155, 123.926488], [10.371134, 123.926520],
+    [10.370803, 123.926792], [10.367682, 123.923741], [10.366404, 123.924504],
+    [10.366602, 123.924894], [10.366354, 123.925317], [10.365998, 123.925032],
+    [10.365443, 123.925185], [10.364944, 123.925007], [10.364357, 123.925210],
+    [10.363263, 123.925041], [10.361940, 123.925765], [10.360982, 123.922209],
+    [10.359897, 123.920749], [10.358136, 123.919063], [10.357694, 123.919075],
+    [10.350277, 123.915472], [10.339723, 123.912933], [10.338121, 123.916869],
+    [10.337091, 123.917289], [10.336796, 123.917227], [10.336711, 123.917330],
+    [10.336114, 123.917080], [10.335554, 123.917321], [10.335281, 123.918380],
+    [10.334854, 123.918762], [10.334374, 123.918822], [10.334200, 123.918717],
+    [10.333054, 123.919528], [10.334064, 123.920139], [10.333312, 123.922126],
+    [10.330902, 123.921309], [10.330927, 123.921231], [10.329974, 123.920812],
+    [10.329972, 123.920559], [10.329920, 123.920343], [10.329609, 123.920464],
+    [10.329137, 123.920148], [10.329131, 123.920188], [10.329449, 123.920332],
+    [10.329477, 123.920399], [10.328519, 123.919932], [10.328222, 123.919927],
+    [10.328052, 123.919804], [10.327911, 123.919513], [10.327634, 123.919674],
+    [10.327613, 123.920151], [10.327248, 123.920786], [10.326706, 123.920941],
+    [10.326642, 123.921197], [10.326353, 123.920959], [10.326280, 123.920769],
+    [10.325689, 123.921058], [10.325591, 123.920669], [10.325349, 123.920762],
+    [10.324764, 123.920341], [10.324409, 123.920770], [10.324143, 123.920828],
+    [10.323933, 123.920421], [10.323567, 123.920628], [10.323289, 123.920332],
+    [10.320958, 123.920317], [10.320612, 123.919362], [10.320495, 123.919387],
+    [10.320187, 123.919190], [10.319919, 123.919229], [10.319860, 123.918841],
+    [10.319110, 123.918967], [10.317355, 123.920222], [10.316989, 123.920145],
+    [10.316365, 123.920880], [10.314791, 123.918633], [10.314240, 123.920091],
+    [10.314898, 123.922220], [10.310878, 123.925419], [10.308629, 123.927270],
+    [10.308355, 123.926921], [10.310077, 123.925465], [10.303941, 123.917952],
+    [10.304231, 123.917724], [10.302307, 123.915345], [10.302429, 123.915240],
+    [10.302088, 123.914806], [10.300530, 123.916109], [10.300250, 123.915782],
+    [10.301817, 123.914481], [10.299647, 123.911775], [10.298983, 123.912966],
+    [10.298597, 123.912770], [10.299262, 123.911528], [10.297629, 123.910635],
+    [10.296995, 123.911807], [10.296747, 123.911670], [10.297378, 123.910418],
+    [10.297000, 123.910198], [10.296797, 123.910557], [10.296209, 123.910238],
+    [10.296259, 123.910133], [10.296161, 123.910061], [10.296175, 123.910021],
+    [10.295955, 123.909908], [10.295882, 123.910034], [10.295726, 123.909937],
+    [10.295903, 123.909602], [10.295332, 123.909286], [10.294678, 123.910517],
+    [10.294424, 123.910375], [10.295048, 123.909221], [10.292963, 123.908111],
+    [10.292342, 123.909256], [10.292083, 123.909106], [10.292614, 123.908143],
+    [10.292390, 123.908006], [10.292511, 123.907768], [10.291224, 123.907059],
+    [10.291271, 123.904031], [10.290598, 123.902918], [10.290925, 123.902778],
+    [10.290268, 123.900955], [10.289985, 123.901049], [10.289806, 123.900654],
+    [10.289642, 123.900619], [10.289568, 123.900351], [10.290062, 123.899756],
+    [10.289912, 123.899359], [10.290223, 123.899026], [10.289642, 123.898610],
+    [10.288712, 123.897012], [10.288668, 123.896449], [10.289310, 123.896475],
+    [10.289455, 123.894147], [10.288996, 123.893796], [10.288871, 123.893238],
+    [10.289326, 123.892498], [10.289326, 123.891162], [10.289877, 123.890947],
+    [10.289804, 123.890588], [10.288202, 123.890676], [10.288175, 123.888236],
+    [10.287521, 123.887238], [10.285900, 123.887549], [10.279630, 123.881959],
+    [10.273934, 123.879819], [10.273293, 123.880278], [10.273235, 123.880685],
+    [10.273288, 123.880833], [10.272485, 123.881946], [10.272522, 123.882482],
+    [10.272395, 123.882590], [10.271506, 123.882493], [10.270414, 123.881455],
+    [10.269511, 123.881694], [10.260530, 123.873964], [10.260393, 123.874111],
+    [10.259926, 123.873854], [10.259514, 123.874336], [10.259176, 123.874055],
+    [10.263518, 123.869173], [10.263018, 123.868798], [10.262670, 123.868961],
+    [10.262522, 123.868267], [10.262258, 123.868218], [10.262080, 123.866871],
+    [10.262508, 123.866448], [10.261178, 123.860014], [10.258828, 123.858523],
+    [10.259093, 123.858071], [10.262649, 123.855995], [10.263127, 123.855986],
+    [10.263061, 123.854857], [10.262940, 123.854550], [10.263160, 123.853971],
+    [10.263095, 123.853808], [10.263103, 123.852726], [10.263208, 123.852368],
+    [10.263020, 123.851960], [10.263150, 123.851574], [10.263470, 123.851205],
+    [10.263615, 123.851300], [10.268267, 123.851717], [10.269741, 123.849418],
+    [10.269909, 123.848389], [10.270145, 123.847844], [10.272411, 123.847077],
+    [10.272659, 123.847676], [10.273796, 123.847683], [10.273813, 123.847600],
+    [10.274049, 123.847510], [10.274158, 123.847347], [10.274202, 123.847084],
+    [10.274497, 123.846882], [10.275992, 123.846344], [10.276213, 123.845565],
+    [10.276741, 123.845478], [10.278647, 123.844182], [10.279080, 123.843382],
+    [10.280860, 123.841296], [10.280429, 123.840614], [10.281270, 123.838105],
+    [10.282244, 123.837730], [10.282275, 123.837481], [10.281800, 123.836588],
+    [10.284200, 123.835404], [10.284604, 123.830297], [10.292971, 123.828579],
+    [10.296567, 123.826076], [10.313848, 123.820202], [10.320490, 123.821026],
+    [10.322402, 123.820283], [10.323290, 123.820637], [10.323582, 123.820213],
+    [10.324517, 123.820320], [10.329531, 123.815459], [10.328791, 123.814500],
+    [10.327692, 123.814353], [10.327517, 123.813683], [10.329358, 123.811356],
+    [10.328320, 123.809626], [10.327645, 123.809716], [10.327291, 123.809269],
+    [10.328376, 123.808252], [10.330563, 123.809371], [10.332229, 123.806500],
+    [10.338039, 123.791530], [10.329806, 123.788934], [10.327653, 123.775850],
+    [10.348866, 123.776176], [10.364748, 123.770173], [10.386035, 123.769502],
+    [10.407871, 123.785034], [10.410283, 123.793900], [10.421038, 123.801071],
+    [10.430967, 123.804544], [10.429887, 123.805251], [10.431635, 123.805404],
+    [10.432043, 123.806189], [10.432902, 123.806219], [10.433603, 123.807329],
+    [10.435368, 123.807332], [10.435990, 123.808568], [10.436863, 123.808735],
+    [10.439531, 123.814069], [10.439217, 123.814828], [10.441269, 123.817808],
+    [10.439812, 123.818915], [10.443009, 123.822415], [10.443950, 123.825618],
+    [10.446604, 123.827468], [10.448597, 123.829388], [10.448775, 123.831605],
+    [10.451845, 123.834521], [10.452100, 123.835130], [10.455418, 123.837882],
+    [10.454828, 123.838694], [10.488366, 123.867084], [10.493494, 123.887977]
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+var isDark   = true;
+var dropMode = false;
+var centerLayer = L.layerGroup();
+
+var TILES = {
+  dark:  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',    { maxZoom:19, subdomains:'abcd' }),
+  light: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom:19, subdomains:'abcd' })
+};
+
+var map = L.map('map', { center:[10.3157,123.8854], zoom:12, zoomControl:true, attributionControl:false });
+TILES.dark.addTo(map);
+centerLayer.addTo(map);
+
+// Draw Cebu City boundary immediately
+(function drawBoundary() {
+  var worldRing = [[-180,-90],[-180,90],[180,90],[180,-90],[-180,-90]];
+  var hole = CEBU_CITY.map(function(p){ return [p[1],p[0]]; });
+  L.geoJSON({ type:'Feature', geometry:{ type:'Polygon', coordinates:[worldRing, hole] } }, {
+    style:{ fillColor:'#000', fillOpacity:0.40, color:'transparent', weight:0, interactive:false }
+  }).addTo(map);
+  L.polygon(CEBU_CITY, {
+    color:'#4CAF90', weight:2.0, opacity:0.9, fillOpacity:0, dashArray:'4,6', interactive:false
+  }).addTo(map);
+})();
+
+function toggleTheme() {
+  if (isDark) {
+    map.removeLayer(TILES.dark); TILES.light.addTo(map);
+    document.getElementById('theme-icon').innerHTML='&#x1F319;';
+    document.getElementById('theme-label').textContent='DARK MODE';
+  } else {
+    map.removeLayer(TILES.light); TILES.dark.addTo(map);
+    document.getElementById('theme-icon').innerHTML='&#x2600;';
+    document.getElementById('theme-label').textContent='LIGHT MODE';
+  }
+  isDark = !isDark;
+}
+
+// ── BRIDGE ────────────────────────────────────────────────────────────────
+function send(p) { window.chrome.webview.postMessage(JSON.stringify(p)); }
+
+window.chrome.webview.addEventListener('message', function(e) {
+  try {
+    var msg = JSON.parse(e.data);
+    switch (msg.type) {
+      case 'init_map':   /* nothing extra needed — boundary already drawn */ break;
+      case 'load_centers': loadCenters(msg.centers||[]); break;
+      case 'enable_drop_mode':  enableDropMode();  break;
+      case 'cancel_drop_mode':  disableDropMode(); break;
+    }
+  } catch(err) { console.error('Bridge error', err); }
+});
+
+// ── CENTERS ───────────────────────────────────────────────────────────────
+function loadCenters(centers) {
+  centerLayer.clearLayers();
+  centers.forEach(function(c) {
+    if (!c.lat || !c.lng) return;
+    L.marker([c.lat, c.lng], { icon: makeIcon(c.isFull) })
+     .bindPopup(buildPopup(c), { maxWidth:240 })
+     .addTo(centerLayer);
+  });
+}
+
+function makeIcon(isFull) {
+  var col = isFull ? '#C05050' : '#4CAF90';
+  return L.divIcon({
+    html:'<div style="width:14px;height:14px;background:'+col+';transform:rotate(45deg);box-shadow:0 0 8px '+col+';"></div>',
+    iconSize:[14,14], iconAnchor:[7,7], className:''
+  });
+}
+
+function buildPopup(c) {
+  var pct    = c.capacity>0 ? Math.min(1, c.occupancy/c.capacity) : 0;
+  var pctPx  = Math.round(pct*100);
+  var barCol = pct>=1 ? '#C05050' : pct>=0.8 ? '#C09A30' : '#4CAF90';
+  var slots  = Math.max(0, c.capacity-c.occupancy);
+  return '<div class="p-title">[CITY-LEVEL] '+esc(c.name)+'</div>'
+       + '<div class="p-row">Barangay: <span>'+esc(c.barangay)+'</span></div>'
+       + '<div class="p-row">Capacity: <span>'+c.capacity+'</span></div>'
+       + '<div class="p-row">Occupied: <span>'+c.occupancy+'</span></div>'
+       + '<div class="p-row">Available: <span style="color:#4CAF90">'+slots+'</span></div>'
+       + '<div class="p-bar-bg"><div class="p-bar-fill" style="width:'+pctPx+'%;background:'+barCol+'"></div></div>'
+       + '<button class="p-btn" onclick="sendUpdateOcc('+c.id+','+c.capacity+','+c.occupancy+')">UPDATE OCCUPANCY</button>'
+       + '<button class="p-btn" onclick="sendViewUsage('+c.id+')" style="background:#1A3A5A;margin-top:4px">VIEW USAGE REPORT</button>'
+       + '<button class="p-btn-red" onclick="sendRemove('+c.id+',\''+esc(c.name)+'\')">REMOVE CENTER</button>';
+}
+
+// ── DROP PIN ──────────────────────────────────────────────────────────────
+function enableDropMode() {
+  dropMode=true;
+  document.getElementById('drop-banner').style.display='block';
+  map.getContainer().style.cursor='crosshair';
+}
+function disableDropMode() {
+  dropMode=false;
+  document.getElementById('drop-banner').style.display='none';
+  map.getContainer().style.cursor='';
+}
+
+map.on('click', async function(e) {
+  if (!dropMode) return;
+  var lat=e.latlng.lat, lng=e.latlng.lng;
+  if (!isInsideCity(lat, lng)) {
+    var el=document.getElementById('reject-banner');
+    el.style.display='block';
+    setTimeout(function(){ el.style.display='none'; }, 3000);
+    return;
+  }
+  disableDropMode();
+  document.getElementById('loader').style.display='block';
+  try {
+    var res = await fetch(
+      'https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lng+'&zoom=16&addressdetails=1',
+      { headers: { 'Accept-Language': 'en' } }
+    );
+    var data = await res.json();
+    var addr = data.address || {};
+    var barangay = addr.suburb || addr.village || addr.quarter
+                || addr.neighbourhood || addr.city_district || '';
+    send({ type:'center_pin_dropped', lat:lat, lng:lng, barangay:barangay });
+  } catch (err) {
+    send({ type:'center_pin_dropped', lat:lat, lng:lng, barangay:'' });
+  } finally {
+    document.getElementById('loader').style.display='none';
+  }
+});
+
+function isInsideCity(lat, lng) {
+  var inside=false;
+  for (var i=0,j=CEBU_CITY.length-1; i<CEBU_CITY.length; j=i++) {
+    var xi=CEBU_CITY[i][0], yi=CEBU_CITY[i][1];
+    var xj=CEBU_CITY[j][0], yj=CEBU_CITY[j][1];
+    if (((yi>lng)!==(yj>lng))&&(lat<(xj-xi)*(lng-yi)/(yj-yi)+xi)) inside=!inside;
+  }
+  return inside;
+}
+
+// ── POPUP ACTIONS ─────────────────────────────────────────────────────────
+function sendUpdateOcc(id, cap, occ) { map.closePopup(); send({type:'open_update_occupancy',centerId:id,capacity:cap,currentOcc:occ}); }
+function sendViewUsage(id)           { map.closePopup(); send({type:'view_usage',centerId:id}); }
+function sendRemove(id, name)        {
+  if (!confirm('Remove "'+name+'" from the map?')) return;
+  map.closePopup(); send({type:'remove_center',centerId:id});
+}
+
+function esc(s) { return String(s||'').replace(/'/g,"\\'").replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+window.addEventListener('load', function() { send({type:'dswd_map_ready'}); });
+</script>
+</body>
+</html>

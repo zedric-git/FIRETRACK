@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FIRETRACK | Cebu-Fire Command</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="scan-texture" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home" data-route="home" aria-label="FireTrack home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>
+        <strong>FIRETRACK</strong>
+        <small>REGION VII // SECTOR: CEBU CITY</small>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#home" data-route="home">Home</a>
+      <a href="#docs" data-route="docs">Docs</a>
+      <a href="#screenshots" data-route="screenshots">Screenshots</a>
+      <a href="#source" data-route="source">Source Code</a>
+    </nav>
+
+  </header>
+
+  <main id="app" class="app-shell">
+    <section id="home" class="page page-home" data-page="home" aria-labelledby="home-title">
+      <div id="cebu-map" class="map-backdrop" aria-hidden="true"></div>
+      <div class="map-wash" aria-hidden="true"></div>
+      <div class="perspective-lines" aria-hidden="true"></div>
+
+      <div class="corner-frame" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="clock-panel">
+        <p><span class="material-symbols-outlined">schedule</span> TIME: <span id="clock">--:--:-- PST</span></p>
+      </div>
+
+      <div class="coord-panel">
+        <dl>
+          <div><dt>Latitude</dt><dd>10.3157&deg; N</dd></div>
+          <div><dt>Longitude</dt><dd>123.8854&deg; E</dd></div>
+        </dl>
+      </div>
+
+      <div class="barangay-orbs" aria-hidden="true"></div>
+      <div class="incident-orbs" aria-hidden="true"></div>
+
+      <div class="home-copy">
+        <h1 id="home-title">FIRETRACK</h1>
+        <p>A desktop application for logging fire incidents, managing affected families, tracking evacuation centers, and sharing updates across Cebu City roles.</p>
+        <div class="hero-actions">
+          <a href="#docs" data-route="docs" class="primary-action"><span class="material-symbols-outlined">dashboard</span> View Documentation</a>
+          <a href="#source" data-route="source" class="secondary-action"><span class="material-symbols-outlined">terminal</span> Source Code</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="docs" class="page page-panel" data-page="docs" aria-labelledby="docs-title" hidden>
+      <aside class="side-rail">
+        <a href="#overview" class="docs-jump active">Project Overview</a>
+        <a href="#getting-started" class="docs-jump">Getting Started</a>
+        <a href="#architecture" class="docs-jump">Architecture</a>
+        <a href="#diagrams" class="docs-jump">Diagrams</a>
+        <a href="#how-things-work" class="docs-jump">How Things Work</a>
+        <a href="#repositories" class="docs-jump">Repositories &amp; Services</a>
+        <a href="#patterns" class="docs-jump">Programming Patterns</a>
+        <a href="#database" class="docs-jump">Database Schema</a>
+        <a href="#external-services" class="docs-jump">External Services</a>
+        <a href="#roles" class="docs-jump">User Roles</a>
+      </aside>
+
+      <div class="content-scroll">
+        <header class="page-title">
+          <h2 id="docs-title">FireTrack System Docs</h2>
+          <p>Developer documentation for the FireTrack desktop application, including setup, architecture, data flow, repositories, database tables, and user roles.</p>
+        </header>
+
+        <section class="doc-section" id="overview">
+          <div class="section-label"><h3>01. Project Overview</h3></div>
+          <div class="doc-copy">
+            <p>FireTrack is a C# object-oriented desktop application built with WinUI 3 for fire incident management in Cebu City, Philippines.</p>
+            <p>The project addresses three main problems: there is no centralized system for logging and tracking fire incidents across Cebu City barangays, relief distribution to affected families is difficult to coordinate across agencies, and BFP, DSWD, Barangay officials, and Citizens need one shared platform during an active fire emergency.</p>
+            <p>FireTrack solves this by giving each operator type (BFP, DSWD, Barangay, Citizen, and Super Admin) its own role-specific dashboard and access controls. BFP logs fires and updates incident status, DSWD records affected families and relief distribution, Barangay users manage evacuation centers, and Citizens can report fires or message DSWD. All roles work from the same MySQL database.</p>
+          </div>
+        </section>
+
+        <section class="doc-section" id="getting-started">
+          <div class="section-label"><h3>02. Getting Started</h3></div>
+          <div class="two-grid">
+            <article class="doc-card">
+              <h4>Prerequisites</h4>
+              <ul>
+                <li>Windows 10 or later, build 19041+</li>
+                <li>Visual Studio 2022 with the Windows App SDK workload</li>
+                <li>MySQL 8 running on localhost:3306 with user root and no password</li>
+                <li>.NET 8 SDK</li>
+              </ul>
+            </article>
+            <article class="doc-card">
+              <h4>Setup</h4>
+              <ol>
+                <li>Clone or open the solution in Visual Studio.</li>
+                <li>The MySQL database named <code>firetrack</code> is created automatically on first launch. No manual setup is needed.</li>
+                <li>Build with <code>dotnet build -r win-x64</code>. Do not use plain <code>dotnet build</code>; it will fail.</li>
+                <li>Run with Ctrl+F5 inside Visual Studio. Do not use F5 because it hangs with WebView2 and multiple windows.</li>
+              </ol>
+            </article>
+          </div>
+          <div class="doc-card login-card">
+            <h4>Default Login</h4>
+            <dl class="key-values">
+              <div><dt>Email</dt><dd><code>admin@firetrack.com</code></dd></div>
+              <div><dt>Password</dt><dd><code>admin</code></dd></div>
+              <div><dt>Role</dt><dd>Super Admin</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="doc-section" id="architecture">
+          <div class="section-label"><h3>03. Architecture</h3></div>
+          <div class="doc-copy">
+            <p>FireTrack is a single desktop application with no separate backend or API. Everything runs in one process per session.</p>
+          </div>
+          <table class="doc-table">
+            <thead>
+              <tr><th>Layer</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Views (.xaml + .xaml.cs)</td><td>UI pages for each role. Code-behind handles page events.</td></tr>
+              <tr><td>ViewModels</td><td>MVVM is used only on the Login and Register pages through CommunityToolkit.Mvvm.</td></tr>
+              <tr><td>Repositories</td><td>All database access. Queries use raw SQL through MySqlConnector.</td></tr>
+              <tr><td>Models</td><td>Plain C# classes that map to database rows.</td></tr>
+              <tr><td>Services</td><td>SessionManager is static and stores the logged-in user for the current process.</td></tr>
+              <tr><td>Assets/Map</td><td>Leaflet.js HTML files loaded inside WebView2.</td></tr>
+            </tbody>
+          </table>
+          <h4 class="subheading">App Flow</h4>
+          <pre class="architecture"><code>App.xaml.cs -> OnLaunched()
+  -> DatabaseHelper.InitializeDatabase()   // creates tables, seeds data
+  -> MainWindow                            // hosts a Frame for navigation
+       -> LoginPage -> LoadingPage -> [Role Dashboard]</code></pre>
+          <p class="note">Multi-window behavior: each successful login starts a new background process through <code>LaunchBackgroundLoginWindow()</code>. Each open window has its own isolated <code>SessionManager</code>, so windows do not share session state.</p>
+        </section>
+
+        <section class="doc-section" id="diagrams">
+          <div class="section-label"><h3>04. Diagrams</h3></div>
+          <div class="diagram-grid">
+            <article class="diagram-card">
+              <div class="diagram-heading">
+                <h4>Entity Relationship Diagram</h4>
+                <a href="assets/diagrams/erd.pdf" target="_blank" rel="noopener">Open PDF</a>
+              </div>
+              <object class="diagram-frame" data="assets/diagrams/erd.pdf" type="application/pdf">
+                <p>This browser cannot show the PDF inline. <a href="assets/diagrams/erd.pdf" target="_blank" rel="noopener">Open the ERD PDF</a>.</p>
+              </object>
+            </article>
+            <article class="diagram-card">
+              <div class="diagram-heading">
+                <h4>Class Diagram</h4>
+                <a href="assets/diagrams/class-diagram.pdf" target="_blank" rel="noopener">Open PDF</a>
+              </div>
+              <object class="diagram-frame" data="assets/diagrams/class-diagram.pdf" type="application/pdf">
+                <p>This browser cannot show the PDF inline. <a href="assets/diagrams/class-diagram.pdf" target="_blank" rel="noopener">Open the class diagram PDF</a>.</p>
+              </object>
+            </article>
+          </div>
+        </section>
+
+        <section class="doc-section" id="how-things-work">
+          <div class="section-label"><h3>05. How Things Work</h3></div>
+          <div class="doc-card-list">
+            <article class="doc-card">
+              <h4>Role Routing</h4>
+              <p>After login, <code>App.xaml.cs</code> reads <code>SessionManager.Role</code> and navigates the main frame to the matching dashboard page. BFP goes to <code>BFPDashboardPage</code>, DSWD goes to <code>DSDWDashboardPage</code>, and the other roles follow the same pattern.</p>
+            </article>
+            <article class="doc-card">
+              <h4>WebView2 and C# Bridge</h4>
+              <p>The Leaflet maps run inside WebView2. JavaScript sends map events to C# with <code>window.chrome.webview.postMessage(JSON.stringify({ type: 'pin_dropped', lat, lng }))</code>. C# sends data back with <code>webView.CoreWebView2.PostWebMessageAsString(json)</code>.</p>
+              <p>Message types include <code>map_ready</code>, <code>pin_dropped</code>, <code>enable_drop_mode</code>, <code>load_incidents</code>, <code>analysis_mode</code>, <code>brgy_selected</code>, and <code>request_delete_incident</code>.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Account Lockout</h4>
+              <p>After 3 failed login attempts, the account is locked for 15 minutes through <code>LockedUntil</code> in the Users table. On each login attempt, the app checks <code>LockedUntil</code> against the current time. If the lock has expired, it resets <code>FailedAttempts</code> to 0.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Evacuation Occupancy</h4>
+              <p>When a family is assigned to an evacuation center, <code>CurrentOccupancy</code> is increased by <code>MemberCount</code> inside a transaction. If the new total would exceed <code>Capacity</code>, the assignment is blocked and <code>IsFull</code> is set to true. Removing a family decreases the count again.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Repeat Displacement</h4>
+              <p>When a new family is registered, <code>FamilyRepository.IsRepeatDisplaced()</code> checks whether the same <code>HeadName</code> already appears in past incidents. If yes, the new record stores <code>IsRepeatDisplaced</code> as 1.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Idempotent Schema Migration</h4>
+              <p><code>MigrateEvacSchema()</code> runs every time the app launches and is safe to run again. It checks <code>INFORMATION_SCHEMA</code> before every <code>ALTER TABLE</code>, so it does not duplicate columns or tables.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="doc-section" id="repositories">
+          <div class="section-label"><h3>06. Repositories &amp; Services</h3></div>
+          <div class="doc-copy">
+            <p>Each repository handles one table or domain. All repositories use raw SQL through MySqlConnector; the app does not use an ORM.</p>
+          </div>
+          <table class="doc-table">
+            <thead>
+              <tr><th>Repository</th><th>Responsibility</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>UserRepository</td><td>Authenticate with lockout, create users, delete users in a transaction, and hash passwords with SHA-256.</td></tr>
+              <tr><td>IncidentRepository</td><td>Create, read, update, and delete incidents; update status; analyze severity by barangay.</td></tr>
+              <tr><td>FamilyRepository</td><td>Register families, assign them to evacuation centers, and check repeat displacement.</td></tr>
+              <tr><td>EvacuationCenterRepository</td><td>Create, update, and delete centers; update capacity and occupancy; handle cross-barangay center requests.</td></tr>
+              <tr><td>ReliefRecordRepository</td><td>Log and retrieve relief distributions per family.</td></tr>
+              <tr><td>BarangayRepository</td><td>Seed and retrieve the 80+ Cebu City barangays.</td></tr>
+              <tr><td>CitizenReportRepository</td><td>Submit and retrieve citizen fire reports, including BFP verification.</td></tr>
+              <tr><td>DSWDMessageRepository</td><td>Send, approve, and reject messages between citizens and DSWD.</td></tr>
+              <tr><td>AuditLogRepository</td><td>Insert and retrieve timestamped action logs for admin review.</td></tr>
+              <tr><td>CrossBarangayRequestRepository</td><td>Manage requests between barangays for shared evacuation centers.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="doc-section" id="patterns">
+          <div class="section-label"><h3>07. Programming Patterns</h3></div>
+          <div class="doc-card-list">
+            <article class="doc-card">
+              <h4>Repository Pattern</h4>
+              <p>All database access goes through repository classes. Views do not write SQL directly; they call repository methods. This keeps UI code cleaner and makes the data layer easier to replace or test.</p>
+            </article>
+            <article class="doc-card">
+              <h4>MVVM, Used Partly</h4>
+              <p>Only <code>LoginPage</code> and <code>RegisterPage</code> use full MVVM through CommunityToolkit.Mvvm, including <code>[RelayCommand]</code>, <code>[ObservableProperty]</code>, and <code>INotifyPropertyChanged</code>. Dashboard pages use code-behind because WebView2 events and multi-panel state were simpler to manage there.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Transactional Deletes</h4>
+              <p>Deleting an incident or user is wrapped in a MySQL transaction. For an incident, the delete process removes relief records, DSWD messages, family evacuation assignments with occupancy rollback, families, and then the incident itself. If any step fails, the whole delete rolls back.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Lazy WebView2 Init</h4>
+              <p>The Citizen dashboard initializes the WebView2 map only when the user first clicks the Map tab. This avoids extra startup time for users who never open the map.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="doc-section" id="database">
+          <div class="section-label"><h3>08. Database Schema</h3></div>
+          <div class="doc-copy">
+            <p>The <code>firetrack</code> database tables used by the app are created automatically on first launch.</p>
+          </div>
+          <table class="doc-table schema-table">
+            <thead>
+              <tr><th>Table</th><th>Key Columns</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Users</td><td>UserID, FullName, Role, Email, PasswordHash, IsActive, FailedAttempts, LockedUntil, AssignedBarangay</td></tr>
+              <tr><td>Barangays</td><td>BarangayID, Name. Seeded with 80+ Cebu City barangays.</td></tr>
+              <tr><td>Incidents</td><td>IncidentID, Barangay, Sitio, GPSLat, GPSLong, AlarmLevel (1-3), Status, DSDWStatus, RegisteredBy</td></tr>
+              <tr><td>Families</td><td>FamilyID, IncidentID, HeadName, MemberCount, EvacuationCenterID, ReliefStatus, IsRepeatDisplaced</td></tr>
+              <tr><td>Relief_Records</td><td>RecordID, FamilyID, AgencyName, ItemType, Quantity, DateDistributed</td></tr>
+              <tr><td>Evacuation_Centers</td><td>CenterID, Name, Barangay, GPSLat, GPSLong, Capacity, CurrentOccupancy, IsFull, CenterType</td></tr>
+              <tr><td>Audit_Logs</td><td>LogID, UserID, Action, TargetTable, TargetID, Reason, Timestamp</td></tr>
+              <tr><td>Barangay_Chosen_Centers</td><td>Junction table for city centers that a barangay has opted into.</td></tr>
+              <tr><td>Cross_Barangay_Requests</td><td>RequestID, RequesterBarangay, TargetCenterID, Status (Pending/Approved/Rejected)</td></tr>
+              <tr><td>Citizen_Reports</td><td>ReportID, ReporterID, Address, Barangay, Status, IsVerified</td></tr>
+              <tr><td>DSWD_Messages</td><td>MessageID, SenderID, IncidentID, Message, Status (Pending/Approved/Rejected)</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="doc-section" id="external-services">
+          <div class="section-label"><h3>09. External Services</h3></div>
+          <table class="doc-table">
+            <thead>
+              <tr><th>Service</th><th>Role</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Leaflet.js 1.9.4</td><td>JavaScript library that renders the interactive maps inside WebView2.</td></tr>
+              <tr><td>CartoDB Dark Tiles</td><td>Tile server that provides the dark map background: <code>https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png</code>.</td></tr>
+              <tr><td>OpenStreetMap</td><td>Underlying map data used by the CartoDB tile layer.</td></tr>
+              <tr><td>Microsoft WebView2</td><td>Edge-based browser engine embedded in WinUI 3 that loads and runs the Leaflet HTML map files.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="doc-section" id="roles">
+          <div class="section-label"><h3>10. User Roles</h3></div>
+          <div class="doc-card-list">
+            <article class="doc-card">
+              <h4>Super Admin</h4>
+              <p>Full system view. Manages all user accounts, handles lockouts and deactivation, and views the complete audit trail. This account cannot be deleted by any other user.</p>
+            </article>
+            <article class="doc-card">
+              <h4>BFP (Bureau of Fire Protection)</h4>
+              <p>Logs fire incidents with GPS by dropping a pin on the Leaflet map, sets alarm levels 1-3, updates incident status from Active to Under Control to Fire Out, views charts per barangay, and reviews citizen fire reports.</p>
+            </article>
+            <article class="doc-card">
+              <h4>DSWD (Dept. of Social Welfare and Development)</h4>
+              <p>Registers affected families to incidents, manages relief distribution records, tracks DSWD status per incident, and handles citizen messages requesting assistance.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Barangay Ops</h4>
+              <p>Manages local evacuation centers, assigns families to centers, sends cross-barangay requests to use neighboring centers, and views the evacuation map.</p>
+            </article>
+            <article class="doc-card">
+              <h4>Citizen</h4>
+              <p>Browses the incident feed filtered by status, sees which incidents affect their barangay, reports fires, checks relief distribution records, and sends messages to DSWD from the incident detail panel.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="screenshots" class="page page-panel" data-page="screenshots" aria-labelledby="screenshots-title" hidden>
+      <div class="content-scroll">
+        <header class="page-title compact-title">
+          <h2 id="screenshots-title">Output Screenshots</h2>
+          <div class="filters" aria-label="Screenshot filters">
+            <button class="active" type="button" data-filter="ALL">All</button>
+            <button type="button" data-filter="LOGIN">Login</button>
+            <button type="button" data-filter="SUPER ADMIN">Super Admin</button>
+            <button type="button" data-filter="BFP">BFP</button>
+            <button type="button" data-filter="DSWD">DSWD</button>
+            <button type="button" data-filter="BARANGAY">Barangay</button>
+            <button type="button" data-filter="CITIZEN">Citizen</button>
+          </div>
+        </header>
+
+        <div class="screenshot-grid" id="screenshot-grid"></div>
+      </div>
+    </section>
+
+    <section id="source" class="page page-source" data-page="source" aria-labelledby="source-title" hidden>
+      <aside class="file-tree">
+        <div class="explorer-title">Explorer</div>
+        <button class="tree-row root is-open" id="source-root-toggle" type="button"><span class="material-symbols-outlined folder-arrow">keyboard_arrow_down</span><span class="material-symbols-outlined folder-icon">folder_open</span><span>CPE262_FINAL_PROJECT</span></button>
+        <div id="source-tree" class="source-tree" aria-label="Project source files"></div>
+      </aside>
+
+      <section class="code-viewer">
+        <div class="breadcrumbs" id="code-breadcrumbs">CPE262_FINAL_PROJECT</div>
+        <div class="metrics source-metrics">
+          <span>LINES: <b id="metric-lines">0</b></span>
+        </div>
+        <div class="code-wrap" aria-labelledby="source-title">
+          <h2 id="source-title" class="sr-only">Source Code</h2>
+          <div id="code-panels" class="code-panels"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="lightbox" id="screenshot-lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close screenshot preview">&times;</button>
+    <img id="lightbox-image" src="" alt="" />
+    <div class="lightbox-caption">
+      <span id="lightbox-role"></span>
+      <h3 id="lightbox-title"></h3>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="source-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
