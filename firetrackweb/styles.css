@@ -1318,6 +1318,33 @@ code {
   height: 100vh;
 }
 
+.github-source-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 16px;
+  border-bottom: 1px solid #2A3F52;
+  color: #4A6B8A;
+  font: 700 10px Consolas, "JetBrains Mono", monospace;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .18s ease;
+}
+
+.github-source-link:hover,
+.github-source-link:focus-visible {
+  color: #FF8070;
+}
+
+.github-source-icon {
+  font-size: 11px;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
 .page-source {
   padding-top: 0;
   background: rgba(6, 20, 35, .98);
