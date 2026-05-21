@@ -505,26 +505,33 @@ button {
   gap: 9px;
   min-height: 46px;
   padding: 0 22px;
-  border: 1px solid var(--primary);
   font: 700 12px var(--caps);
   letter-spacing: .12em;
   text-transform: uppercase;
-  transition: transform .15s ease, background .2s ease, color .2s ease;
+  transition: transform .15s ease, border-color .2s ease, background .2s ease, color .2s ease;
 }
 
 .primary-action {
+  border: 1px solid var(--primary);
   background: var(--primary);
   color: #640c08;
 }
 
 .secondary-action {
-  background: rgba(255, 180, 169, .04);
-  color: var(--primary);
+  border: 1px solid #2A3F52;
+  background: transparent;
+  color: rgba(214, 228, 249, .78);
+  font-family: Consolas, "Courier New", monospace;
 }
 
 .primary-action:hover,
 .secondary-action:hover {
   transform: translateY(-2px);
+}
+
+.secondary-action:hover {
+  border-color: #FF8070;
+  color: #FF9B8A;
 }
 
 .page-panel,
